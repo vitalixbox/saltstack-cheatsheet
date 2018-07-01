@@ -1,0 +1,3 @@
+webserver:
+  'salt-minion-?':
+    - apache

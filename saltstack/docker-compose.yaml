@@ -1,0 +1,30 @@
+version: "3"
+services:
+  salt-master:
+    build:
+      dockerfile: ./docker/salt-master.Dockerfile
+      context: .
+    volumes:
+      - ./etc/master.conf:/etc/salt/master
+      - ./salt:/srv/salt
+      - ./web:/srv/web
+      - ./pillar:/srv/pillar
+
+  salt-cloud:
+    build:
+      dockerfile: ./docker/salt-cloud.Dockerfile
+      context: .
+
+  salt-minion-1:
+    build:
+      dockerfile: ./docker/salt-minion-1.Dockerfile
+      context: .
+    volumes:
+      - ./etc/minion-1.conf:/etc/salt/minion
+
+  salt-minion-2:
+    build:
+      dockerfile: ./docker/salt-minion-2.Dockerfile
+      context: .
+    volumes:
+      - ./etc/minion-2.conf:/etc/salt/minion
