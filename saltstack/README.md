@@ -1,14 +1,15 @@
 # SaltStack
+#context
 
 ## Links
-[Embedded salt modules: salt/salt/modules](https://github.com/saltstack/salt/tree/develop/salt/modules)
-[Configuring the Salt Minion](https://docs.saltstack.com/en/latest/ref/configuration/minion.html)
-[Configuring the Salt Master](https://docs.saltstack.com/en/latest/ref/configuration/master.html)
-[Configuration file examples](https://salt.readthedocs.io/en/stable/ref/configuration/examples.html)
-[State System Reference](https://docs.saltstack.com/en/latest/ref/states/)
-
-[GitHub - harkx/saltstack-cheatsheet: SaltStack Cheat Sheet](https://github.com/harkx/saltstack-cheatsheet)
-[GitHub - eon01/SaltStackCheatSheet: SaltStack Cheat Sheet](https://github.com/eon01/SaltStackCheatSheet)
+* [Embedded salt modules: salt/salt/modules](https://github.com/saltstack/salt/tree/develop/salt/modules)
+* [Configuring the Salt Minion](https://docs.saltstack.com/en/latest/ref/configuration/minion.html)
+* [Configuring the Salt Master](https://docs.saltstack.com/en/latest/ref/configuration/master.html)
+* [Configuration file examples](https://salt.readthedocs.io/en/stable/ref/configuration/examples.html)
+* [State System Reference](https://docs.saltstack.com/en/latest/ref/states/)
+* 
+* [GitHub - harkx/saltstack-cheatsheet: SaltStack Cheat Sheet](https://github.com/harkx/saltstack-cheatsheet)
+* [GitHub - eon01/SaltStackCheatSheet: SaltStack Cheat Sheet](https://github.com/eon01/SaltStackCheatSheet)
 
 ### Common
 ```sh
@@ -92,6 +93,9 @@ sudo salt '*' saltutil.sync_all
 
 ### Pillar
 ```
+# Pillar data is similar to grains except that it can be defined more dynamically and is
+# a secure store for data 
+
 salt '*' saltutil.refresh_pillar
 salt '*' pillar.items
 ```
@@ -114,8 +118,8 @@ salt '*' grains.delval baz
 salt '*' grains.delval baz destructive=True
 ```
 
-### Pillar
-```sh
-# Pillar data is similar to grains except that it can be defined more dynamically and is
-# a secure store for data 
-```
+
+
+
+
+
