@@ -1,51 +1,11 @@
-# SaltStack
-#context
+# SaltStack Cheat Sheet
 
-## Links
-* [Embedded salt modules: salt/salt/modules](https://github.com/saltstack/salt/tree/develop/salt/modules)
-* [Configuring the Salt Minion](https://docs.saltstack.com/en/latest/ref/configuration/minion.html)
-* [Configuring the Salt Master](https://docs.saltstack.com/en/latest/ref/configuration/master.html)
-* [Configuration file examples](https://salt.readthedocs.io/en/stable/ref/configuration/examples.html)
-* [State System Reference](https://docs.saltstack.com/en/latest/ref/states/)
-* 
+This Cheat Sheet started as notes for book [“Learning SaltStack”](https://www.packtpub.com/networking-and-servers/learning-saltstack-second-edition).
+Also this notes is suplemented from the following Cheat Sheets:
 * [GitHub - harkx/saltstack-cheatsheet: SaltStack Cheat Sheet](https://github.com/harkx/saltstack-cheatsheet)
 * [GitHub - eon01/SaltStackCheatSheet: SaltStack Cheat Sheet](https://github.com/eon01/SaltStackCheatSheet)
 
-### Common
-```sh
-# Here is the full version information 
-salt --versions-report
-
-# Format output
-salt --out=json '*' cmd.run_all 'echo OK'
---out=nested|yaml|json|quiet|....
-
-# Simple call
-salt '*' test.ping  # Use function ping from module test
-
-# Documentation
-salt 'salt-minion-1' sys.list_functions test # List functions
-salt '*' sys.list_state_functions pkg  # Functions that can be used in states
-salt '*' sys.list_modules
-salt '*' sys.state_doc pkg.removed
-salt '*' sys.doc test.fib # Show documentation
-salt '*' sys.doc test
-
-# Minion info
-salt '*' status.discusage
-salt '*' status.loadavg
-salt '*' status.meminfo
-salt '*' status.uptime
-
-# Commands
-salt '*' cmd.run 'echo Hello!'
-salt '*' cmd.run_stdout 'echo Hello!'
-salt '*' cmd.run_stderr 'echo Hello!'
-salt '*' cmd.retcode 'echo Hello!'
-salt '*' cmd.run_all 'echo Hello!'
-```
-
-### Quickstart
+## Quickstart
 ```sh
 salt '*' test.ping
 
@@ -58,8 +18,30 @@ salt '*' pkg.list_pkgs
 salt '*' service.status nginx
 ```
 
-### Key management
+## Documentation
 ```sh
+salt 'salt-minion-1' sys.list_functions test # List functions
+salt '*' sys.list_state_functions pkg  # Functions that can be used in states
+salt '*' sys.list_modules
+salt '*' sys.state_doc pkg.removed
+salt '*' sys.doc test.fib # Show documentation
+salt '*' sys.doc test
+```
+
+## General
+```sh
+# Here is the full version information 
+salt --versions-report
+
+# Format output
+salt --out=json '*' cmd.run_all 'echo OK'
+--out=nested|yaml|json|quiet|....
+```
+
+## Master configuration
+```sh
+# Key management
+
 # minion
 salt-call --local key.finger
 # master
@@ -68,7 +50,38 @@ salt-key -f salt-minion-1  # show fingerprint
 salt-key -a salt-minion-1  # accept key
 ```
 
-### Matching
+## Minion management
+```sh
+# Minion info
+salt '*' status.discusage
+salt '*' status.loadavg
+salt '*' status.meminfo
+salt '*' status.uptime
+
+# Syncing
+salt '*' saltutil.sync_all
+salt '*' saltutil.sync_grains
+salt '*' saltutil.sync_modules
+salt '*' saltutil.sync_pillars
+salt '*' saltutil.refresh_pillar
+
+# Jobs
+salt-run jobs.active      # get list of active jobs
+salt-run jobs.list_jobs   # get list of historic jobs
+salt-run jobs.lookup_jid <job id number>  # get details of this specific job
+```
+
+## States
+```sh
+salt '*' state.sls xxx.yyy
+salt '*' state.highstate
+salt '*' state.show_sls search_str *  # Search string in states
+
+# Rendering
+salt '*' slsutil.renderer /path/to/file.sls 'jinja|yaml'
+```
+
+## Matching
 ```sh
 # Globbing
 salt '*' test.ping
@@ -86,21 +99,7 @@ salt --grain 'os_family:Debian' test.ping
 *salt -G 'os:u*' test.ping*
 ```
 
-### Modules
-```sh
-sudo salt '*' saltutil.sync_all
-```
-
-### Pillar
-```
-# Pillar data is similar to grains except that it can be defined more dynamically and is
-# a secure store for data 
-
-salt '*' saltutil.refresh_pillar
-salt '*' pillar.items
-```
-
-### Grains
+## Grains & Pillars management
 ```sh
 # Grains represent static data describing a minion
 
@@ -118,8 +117,46 @@ salt '*' grains.delval baz
 salt '*' grains.delval baz destructive=True
 ```
 
+## Useful modules
+```sh
+# Run command
+salt '*' cmd.run 'echo Hello!'
+salt '*' cmd.run_stdout 'echo Hello!'
+salt '*' cmd.run_stderr 'echo Hello!'
+salt '*' cmd.retcode 'echo Hello!'
+salt '*' cmd.run_all 'echo Hello!'
 
+# Packages
+salt '*' pkg.list_upgrades
+salt '*' pkg.upgrade
+salt '*' pkg.version bash
+salt '*' pkg.install bash
+salt '*' pkg.install bash refresh=True 
 
+# Services
+salt '*' service.status <service name>
+salt '*' service.available <service name>
+salt '*' service.start <service name>
+salt '*' service.restart <service name>
+salt '*' service.stop <service name>
 
+# Network
+salt 'minion1' network.ip_addrs
+salt 'minion1' network.ping <hostname>
+salt 'minion1' network.traceroute <hostname>
+salt 'minion1' network.get_hostname
+salt 'minion1' network.mod_hostname
 
+# http
+salt-run http.query http://eon01.com text=true
+salt-run http.query http://eon01.com headers=true
+salt-run http.query http://eon01.com status=true
+salt '*' http.query http://domain.com/ method=POST params='key1=val1&key2=val2'
+```
 
+## Links
+* [Embedded salt modules: salt/salt/modules](https://github.com/saltstack/salt/tree/develop/salt/modules)
+* [Configuring the Salt Minion](https://docs.saltstack.com/en/latest/ref/configuration/minion.html)
+* [Configuring the Salt Master](https://docs.saltstack.com/en/latest/ref/configuration/master.html)
+* [Configuration file examples](https://salt.readthedocs.io/en/stable/ref/configuration/examples.html)
+* [State System Reference](https://docs.saltstack.com/en/latest/ref/states/)
