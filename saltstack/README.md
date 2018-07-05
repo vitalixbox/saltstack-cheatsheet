@@ -69,6 +69,11 @@ salt '*' saltutil.refresh_pillar
 salt-run jobs.active      # get list of active jobs
 salt-run jobs.list_jobs   # get list of historic jobs
 salt-run jobs.lookup_jid <job id number>  # get details of this specific job
+
+# Minons connected to master
+salt-run manage.up
+salt-run manage.status
+salt-run manage.down
 ```
 
 ## States
@@ -154,9 +159,26 @@ salt-run http.query http://eon01.com status=true
 salt '*' http.query http://domain.com/ method=POST params='key1=val1&key2=val2'
 ```
 
+## Salt Cloud
+```sh
+# Manage configs
+salt-cloud --list-providers
+salt-cloud --list-images digitalocean-config
+salt-cloud --list-sizes digitalocean-config
+salt-cloud --list-locations digitalocean-config
+
+salt-cloud -p ubuntu minion1 minion2  # Create two minions
+salt-cloud -d minion1 minion2  # Delete minions
+salt-cloud -m ./cluster.map -d -P  # Deploy cluster.map parallel
+
+salt-cloud --query  # Show cluster
+salt-cloud -a reboot minion1  # Cloud actions
+```
+
 ## Links
 * [Embedded salt modules: salt/salt/modules](https://github.com/saltstack/salt/tree/develop/salt/modules)
 * [Configuring the Salt Minion](https://docs.saltstack.com/en/latest/ref/configuration/minion.html)
 * [Configuring the Salt Master](https://docs.saltstack.com/en/latest/ref/configuration/master.html)
+* [Configuring the Salt Cloud](https://docs.saltstack.com/en/latest/topics/cloud/config.html)
 * [Configuration file examples](https://salt.readthedocs.io/en/stable/ref/configuration/examples.html)
 * [State System Reference](https://docs.saltstack.com/en/latest/ref/states/)
