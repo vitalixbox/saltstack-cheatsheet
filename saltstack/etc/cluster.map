@@ -1,0 +1,12 @@
+ubuntu:
+  - mymaster:
+      make_master: True
+      size: 1gb
+  - myminion1:
+      grains:
+        cheese: tasty
+        omelet: du fromage
+  - myminion2:
+      grains:
+        cheese: more tasty
+        omelet: with peppers

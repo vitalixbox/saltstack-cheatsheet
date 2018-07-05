@@ -9,11 +9,10 @@ services:
       - ./salt:/srv/salt
       - ./web:/srv/web
       - ./pillar:/srv/pillar
-
-  salt-cloud:
-    build:
-      dockerfile: ./docker/salt-cloud.Dockerfile
-      context: .
+      - ./etc/digitalocean.conf:/etc/salt/cloud.providers.d/digitalocean.conf
+      - ./etc/ubuntu.conf:/etc/salt/cloud.profiles.d/ubuntu.conf
+      - ./etc/cluster.map:/etc/salt/cluster.map
+      - .:/salt
 
   salt-minion-1:
     build:
