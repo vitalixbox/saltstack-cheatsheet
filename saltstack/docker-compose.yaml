@@ -20,6 +20,9 @@ services:
       context: .
     volumes:
       - ./etc/minion-1.conf:/etc/salt/minion
+      - .:/salt
+    depends_on:
+      - salt-master
 
   salt-minion-2:
     build:
@@ -27,3 +30,6 @@ services:
       context: .
     volumes:
       - ./etc/minion-2.conf:/etc/salt/minion
+      - .:/salt
+    depends_on:
+      - salt-master

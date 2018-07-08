@@ -159,6 +159,11 @@ salt-run http.query http://eon01.com status=true
 salt '*' http.query http://domain.com/ method=POST params='key1=val1&key2=val2'
 ```
 
+## Reactor
+```sh
+salt-call event.send foo '{foo: bar}' 
+```
+
 ## Salt Cloud
 ```sh
 # Manage configs
